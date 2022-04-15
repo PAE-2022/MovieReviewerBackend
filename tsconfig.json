@@ -15,7 +15,19 @@
         "paths": {
             "*": [
                 "node_modules/*"
-            ]
+            ],
+            "@config/*": [
+                "src/config/*"
+            ],
+            "@controllers/*": [
+                "src/controllers/*"
+            ],
+            "@routes/*": [
+                "src/routes/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
         }
     },
     "include": [
