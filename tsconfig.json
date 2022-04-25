@@ -1,25 +1,29 @@
 {
-    "compilerOptions": {
-        "module": "CommonJS",
-        "lib": ["ESNext"],
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "allowJs": false,
-        "esModuleInterop": true,
-        "target": "ES6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*"
-            ]
-        }
-    },
-    "include": [
-        "src/**/*",
-        "tests/**/*"
-    ]
+  "compilerOptions": {
+    "module": "CommonJS",
+    "lib": ["ESNext"],
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "target": "ES6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"],
+      "@utils/*": ["utils/*"],
+      "@models/*": ["models/*"],
+      "@dto/*": ["dto/*"],
+      "@errors/*": ["errors/*"],
+    }
+  },
+  "include": ["src/**/*", "tests/**/*"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
