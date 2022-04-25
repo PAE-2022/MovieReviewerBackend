@@ -1,4 +1,4 @@
-import { BadRequestError } from '@errors/controller-error';
+import { BadRequestError } from '@errors/http-error';
 import { logErrors } from './log-error';
 
 describe('Log errors middleware', () => {

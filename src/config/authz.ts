@@ -8,7 +8,7 @@ export const checkJwt = jwt({
     rateLimit: true,
     jwksRequestsPerMinute: 5,
     jwksUri: `https://${config.get('AUTH0_DOMAIN')}/.well-known/jwks.json`,
-  }),
+  }) as any,
 
   audience: config.get('AUTH0_AUDIENCE'),
   issuer: `https://${config.get('AUTH0_DOMAIN')}/`,

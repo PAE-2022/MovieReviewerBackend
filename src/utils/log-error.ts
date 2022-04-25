@@ -1,4 +1,4 @@
-import { HttpError } from '@errors/controller-error';
+import { HttpError } from '@errors/http-error';
 import { NextFunction, Request, Response } from 'express';
 
 export const logErrors = () => {

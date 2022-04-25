@@ -1,4 +1,4 @@
-import { BadRequestError, HttpError } from '@errors/controller-error';
+import { BadRequestError, HttpError } from '@errors/http-error';
 import { MongoError } from 'mongodb';
 import { NextFunction, Request, Response } from 'express';
 
