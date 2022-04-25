@@ -1,4 +1,4 @@
-import { BadRequestError, HttpError } from 'errors/controller-error';
+import { BadRequestError, HttpError } from '@errors/controller-error';
 import { MongoError } from 'mongodb';
 import { NextFunction, Request, Response } from 'express';
 
@@ -29,7 +29,7 @@ export const tryCatchHandler = (
 };
 
 export const errorHandler = () => {
-  return async (e: Error, req: Request, res: Response, next: NextFunction) => {
+  return async (e: Error, _req: Request, res: Response) => {
     if (e) {
       if (e instanceof HttpError) {
         res.status(e.statusCode).json(e.response);
