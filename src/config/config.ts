@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 class Config {
   private keys: NodeJS.Dict<string>;
 
@@ -43,9 +47,12 @@ class Config {
 const config = new Config(process.env);
 
 config.ensureValues(
-  'GOOGLE_CLIENT_ID',
-  'GOOGLE_CLIENT_SECRET',
-  'GOOGLE_CALLBACK_URL',
+  // Auth0 config
+  'AUTH0_AUDIENCE',
+  'AUTH0_DOMAIN',
+
+  // Mongo
+  'MONGO_URL',
 );
 
 export default config;

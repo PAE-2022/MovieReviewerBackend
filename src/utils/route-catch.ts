@@ -1,20 +1,39 @@
-import { ControllerError } from 'errors/controller-error';
+import { BadRequestError, HttpError } from 'errors/controller-error';
+import { MongoError } from 'mongodb';
 import { NextFunction, Request, Response } from 'express';
 
-export const catchErrors = () => {
-  return (req: Request, res: Response, next: NextFunction) => {
+export const tryCatchHandler = (
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>,
+) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      next();
+      await fn(req, res, next);
     } catch (e) {
-      if (e instanceof ControllerError) {
-        if (e.error) {
-          console.error(`ControllerError`, e.error);
+      if (e instanceof MongoError) {
+        // Duplicate
+        if (e.code === 11000) {
+          next(
+            new BadRequestError(
+              {
+                message: 'Duplicate object',
+              },
+              e,
+            ),
+          );
         }
-        res.status(e.statusCode).json({
-          message: e.message,
-        });
       } else {
-        console.error(`UnknownError`, e);
+        next(e);
+      }
+    }
+  };
+};
+
+export const errorHandler = () => {
+  return async (e: Error, req: Request, res: Response, next: NextFunction) => {
+    if (e) {
+      if (e instanceof HttpError) {
+        res.status(e.statusCode).json(e.response);
+      } else {
         res.status(500).json({
           message: 'Internal server error',
         });

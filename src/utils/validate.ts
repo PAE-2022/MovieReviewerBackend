@@ -4,12 +4,13 @@ import Joi from 'joi';
 
 export function validate<T>(schema: Joi.ObjectSchema<T>) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = await schema.validateAsync(req.body);
-
-    if (error) {
-      throw new BadRequestError(error.details[0].message);
+    try {
+      await schema.validateAsync(req.body);
+    } catch (e) {
+      next(new BadRequestError(e, e.message));
+      return;
     }
 
-    await next();
+    next();
   };
 }

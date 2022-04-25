@@ -1,40 +1,42 @@
-export class ControllerError extends Error {
+export class HttpError extends Error {
   public statusCode: number;
   public error?: Error;
+  public response: object;
 
-  constructor(message: string, statusCode: number, error?: Error) {
-    super(message);
+  constructor(response: object, statusCode: number, error?: Error) {
+    super('HttpError');
+    this.response = response;
     this.statusCode = statusCode;
     this.error = error;
   }
 }
 
-export class BadRequestError extends ControllerError {
-  constructor(message: string, error?: Error) {
-    super(message, 400, error);
+export class BadRequestError extends HttpError {
+  constructor(response: object, error?: Error) {
+    super(response, 400, error);
   }
 }
 
-export class UnauthorizedError extends ControllerError {
-  constructor(message: string, error?: Error) {
-    super(message, 401, error);
+export class UnauthorizedError extends HttpError {
+  constructor(response: object, error?: Error) {
+    super(response, 401, error);
   }
 }
 
-export class ForbiddenError extends ControllerError {
-  constructor(message: string, error?: Error) {
+export class ForbiddenError extends HttpError {
+  constructor(message: object, error?: Error) {
     super(message, 403, error);
   }
 }
 
-export class NotFoundError extends ControllerError {
-  constructor(message: string, error?: Error) {
+export class NotFoundError extends HttpError {
+  constructor(message: object, error?: Error) {
     super(message, 404, error);
   }
 }
 
-export class InternalServerError extends ControllerError {
-  constructor(message: string, error?: Error) {
+export class InternalServerError extends HttpError {
+  constructor(message: object, error?: Error) {
     super(message, 500, error);
   }
 }
