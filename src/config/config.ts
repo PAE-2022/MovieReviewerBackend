@@ -47,12 +47,11 @@ class Config {
 const config = new Config(process.env);
 
 config.ensureValues(
-  // Auth0 config
-  'AUTH0_AUDIENCE',
-  'AUTH0_DOMAIN',
-
   // Mongo
   'MONGO_URL',
+
+  // JWT
+  'JWT_SECRET',
 );
 
 export default config;

@@ -1,5 +1,5 @@
-import { checkJwt } from '@config/authz';
+import passport from 'passport';
 
-export const authorize = () => {
-  return checkJwt;
-};
+export function authorize() {
+  return passport.authenticate('jwt', { session: false });
+}

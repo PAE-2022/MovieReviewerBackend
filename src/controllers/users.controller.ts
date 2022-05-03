@@ -1,1 +1,5 @@
-export class UserController {}
+import { UserModel } from '@models/user';
+
+export class UserController {
+
+}
