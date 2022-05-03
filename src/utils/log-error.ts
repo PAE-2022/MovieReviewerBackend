@@ -8,6 +8,6 @@ export const logErrors = () => {
     } else {
       console.error(`Error`, err);
     }
-    await next(err);
+    next(err);
   };
 };

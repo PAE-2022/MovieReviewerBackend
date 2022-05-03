@@ -3,6 +3,8 @@ import UserRouter from '@routes/users';
 import { errorHandler } from '@utils/route-catch';
 import { logErrors } from '@utils/log-error';
 
+import '@config/auth';
+
 const app = Express();
 
 app.use(Express.json());

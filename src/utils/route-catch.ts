@@ -9,18 +9,16 @@ export const tryCatchHandler = (
     try {
       await fn(req, res, next);
     } catch (e) {
-      if (e instanceof MongoError) {
+      if (e instanceof MongoError && e.code === 11000) {
         // Duplicate
-        if (e.code === 11000) {
-          next(
-            new BadRequestError(
-              {
-                message: 'Duplicate object',
-              },
-              e,
-            ),
-          );
-        }
+        next(
+          new BadRequestError(
+            {
+              message: 'Duplicate object',
+            },
+            e,
+          ),
+        );
       } else {
         next(e);
       }
@@ -29,7 +27,8 @@ export const tryCatchHandler = (
 };
 
 export const errorHandler = () => {
-  return async (e: Error, _req: Request, res: Response) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return (e: Error, _req: Request, res: Response, _next: NextFunction) => {
     if (e) {
       if (e instanceof HttpError) {
         res.status(e.statusCode).json(e.response);
