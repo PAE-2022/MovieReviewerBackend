@@ -1,10 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { Schema, model, Document } from 'mongoose';
 import { Movie } from './movie';
 import { User } from './user';
 
 interface IComment extends Document {
-  belongsTo: Movie;
-  createdBy: User;
+  belongsTo: Movie | string | ObjectId;
+  createdBy: User | string | ObjectId;
   content: string;
 
   createdAt: Date;
