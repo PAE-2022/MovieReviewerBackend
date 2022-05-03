@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import { Comment } from './comments';
 
 interface IPlatform {
   name: string;
@@ -16,6 +17,7 @@ interface IMovie extends Document {
   screenwriters: string[];
   cast: string[];
   genres: string[];
+  comments: Comment[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -74,6 +76,15 @@ const UserSchema = new Schema<IMovie>({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  comments: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
+    default: [],
   },
 });
 

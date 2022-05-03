@@ -1,5 +1,1 @@
-import { UserModel } from '@models/user';
-
-export class UserController {
-
-}
+export class UserController {}
