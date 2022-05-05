@@ -92,6 +92,6 @@ UserSchema.pre<IMovie>('save', async function (next) {
   this.updatedAt = new Date();
   next();
 });
-export const MovieModel = model<IMovie>('User', UserSchema);
+export const MovieModel = model<IMovie>('Movie', UserSchema);
 
 export type Movie = IMovie & Document;

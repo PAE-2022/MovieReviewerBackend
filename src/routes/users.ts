@@ -29,7 +29,13 @@ router.post(
     req.login(user, { session: false }, async (err) => {
       if (err) return next(err);
       const body = { _id: user._id, email: user.email };
-      const token = jwt.sign({ user: body }, config.get('JWT_SECRET'));
+      const token = jwt.sign(
+        { id: body._id, email: body.email },
+        config.get('JWT_SECRET'),
+        {
+          expiresIn: '30d',
+        },
+      );
       return res.json({ token });
     });
   },

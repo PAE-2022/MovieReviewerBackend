@@ -36,6 +36,6 @@ UserSchema.pre<IFollower>('save', async function (next) {
   this.updatedAt = new Date();
   next();
 });
-export const FollowerModel = model<IFollower>('User', UserSchema);
+export const FollowerModel = model<IFollower>('Follower', UserSchema);
 
 export type Follower = IFollower & Document;

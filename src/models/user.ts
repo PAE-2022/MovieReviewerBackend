@@ -1,5 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { ObjectId } from 'mongodb';
 
 interface IUser extends Document {
   email: string;
@@ -9,6 +10,7 @@ interface IUser extends Document {
   avatar: string;
   createdAt: Date;
   updatedAt: Date;
+  following: IUser[] | string[] | ObjectId[];
 
   isValidPassword(password: string): Promise<boolean>;
 }
@@ -42,6 +44,15 @@ const UserSchema = new Schema<IUser>({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  following: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    default: [],
   },
 });
 
