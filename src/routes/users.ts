@@ -1,5 +1,10 @@
 import config from '@config/config';
+import { UserController } from '@controllers/users.controller';
+import { AddToFavoritesDto } from '@dto/users/add-to-favorites.dto';
 import { User } from '@models/user';
+import { authorize } from '@utils/authorize';
+import { tryCatchHandler } from '@utils/route-catch';
+import { validate } from '@utils/validate';
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
@@ -39,6 +44,37 @@ router.post(
       return res.json({ token });
     });
   },
+);
+
+router.post(
+  '/favorites',
+  validate<AddToFavoritesDto>(AddToFavoritesDto),
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const { movieId } = req.body as AddToFavoritesDto;
+
+    const controller = new UserController();
+    await controller.addMovieToFavorites(userId, movieId);
+    res.json({
+      message: 'Movie added to favorites',
+    });
+  }),
+);
+
+router.delete(
+  '/favorites/:id',
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const { id: movieId } = req.params;
+
+    const controller = new UserController();
+    await controller.removeMovieFromFavorites(userId, movieId);
+    res.json({
+      message: 'Movie removed from favorites',
+    });
+  }),
 );
 
 export default router;
