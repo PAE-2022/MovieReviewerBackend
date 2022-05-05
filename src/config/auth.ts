@@ -6,7 +6,7 @@ import { CreateUserDto } from '@dto/users/create-user.dto';
 import { validate } from 'class-validator';
 import { generateGravatarUrl } from '@utils/gravatar-gen';
 import { MongoError } from 'mongodb';
-import { BadRequestError } from '@errors/http-error';
+import { BadRequestError, NotFoundError } from '@errors/http-error';
 import config from './config';
 
 passport.use(
@@ -85,7 +85,15 @@ passport.use(
     },
     async (token, done) => {
       try {
-        return done(null, token.user);
+        const user = await UserModel.findById(token.id);
+        if (!user) {
+          return done(
+            new NotFoundError({
+              message: 'User not found',
+            }),
+          );
+        }
+        return done(null, user);
       } catch (e) {
         done(e);
       }

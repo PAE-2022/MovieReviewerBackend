@@ -39,6 +39,6 @@ UserSchema.pre<IComment>('save', async function (next) {
   this.updatedAt = new Date();
   next();
 });
-export const CommentModel = model<IComment>('User', UserSchema);
+export const CommentModel = model<IComment>('Comment', UserSchema);
 
 export type Comment = IComment & Document;

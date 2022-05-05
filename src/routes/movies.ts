@@ -15,18 +15,30 @@ router.get(
   }),
 );
 
+router.get(
+  '/:id',
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const { id: movieId } = req.params;
+    const controller = new MoviesController();
+    const movie = await controller.getMovieById(userId, movieId);
+    res.json(movie);
+  }),
+);
+
 router.post(
   '/:id/comment',
   authorize(),
   tryCatchHandler(async (req, res) => {
     const controller = new MoviesController();
-    const { _id: userId } = req.user as User;
+    const { id: userId } = req.user as User;
     const comment = await controller.addComment(
       req.params.id,
       userId,
       req.body.comment,
     );
-    res.json(comment);
+    res.status(201).json(comment);
   }),
 );
 
