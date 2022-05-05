@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import { User } from './user';
 
-interface IFollower extends Document {
+export interface IFollower extends Document {
   from: User;
   user: User;
 

@@ -10,18 +10,18 @@ import { CreateUserDto } from '@dto/users/create-user.dto';
 import { CreateCommentDto } from '@dto/movies/create-comment.dto';
 import { UserModel } from '@models/user';
 import { CommentModel } from '@models/comments';
+import { getToken } from '../test-utils/auth';
 
-async function getToken(email: string, password: string): Promise<string> {
-  return await request(app)
-    .post('/api/users/login')
-    .send({ email, password })
-    .then((res) => res.body.token);
-}
 const email = faker.internet.email();
 const password = faker.internet.password();
 
 describe('GET /api/movies', () => {
   beforeAll(async () => {
+    // Delete all content
+    await MovieModel.deleteMany({});
+    await UserModel.deleteMany({});
+    await CommentModel.deleteMany({});
+
     const movieCount = 10;
 
     // Create test data
@@ -75,7 +75,6 @@ describe('GET /api/movies', () => {
   it('Get movie details - 200 OK', async () => {
     const token = await getToken(email, password);
     const movie = await MovieModel.findOne({});
-
     await request(app)
       .get(`/api/movies/${movie.id}`)
       .set('Authorization', `Bearer ${token}`)
@@ -83,9 +82,6 @@ describe('GET /api/movies', () => {
   });
 
   afterAll(async () => {
-    await MovieModel.deleteMany({});
-    await UserModel.deleteMany({});
-    await CommentModel.deleteMany({});
     await mongoose.connection.close();
   });
 });

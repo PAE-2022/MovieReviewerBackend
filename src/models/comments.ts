@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 import { Movie } from './movie';
 import { User } from './user';
 
-interface IComment extends Document {
+export interface IComment extends Document {
   belongsTo: Movie | string | ObjectId;
   createdBy: User | string | ObjectId;
   content: string;

@@ -6,7 +6,7 @@ interface IPlatform {
   url: string;
 }
 
-interface IMovie extends Document {
+export interface IMovie extends Document {
   name: string;
   cover: string;
   synopsis: string;

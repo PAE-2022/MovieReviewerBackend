@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
+import { IMovie } from './movie';
 
 interface IUser extends Document {
   email: string;
@@ -11,6 +12,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   following: IUser[] | string[] | ObjectId[];
+  favorites: IMovie[] | string[] | ObjectId[];
 
   isValidPassword(password: string): Promise<boolean>;
 }
@@ -50,6 +52,15 @@ const UserSchema = new Schema<IUser>({
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
+      },
+    ],
+    default: [],
+  },
+  favorites: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Movie',
       },
     ],
     default: [],
