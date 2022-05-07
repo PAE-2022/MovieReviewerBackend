@@ -67,7 +67,7 @@ const UserSchema = new Schema<IUser>({
   },
 });
 
-UserSchema.pre<IUser>('save', async function (next) {
+UserSchema.pre<IUser>('validate', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
