@@ -56,4 +56,63 @@ export class MoviesController {
     }
     return movie;
   }
+
+  async assignScore(
+    movieId: string,
+    userWhoReviews: string,
+    score: number,
+  ): Promise<Movie> {
+    const movie = await MovieModel.findById(movieId);
+    if (!movie) {
+      throw new NotFoundError({
+        message: 'Movie not found',
+      });
+    }
+    // Check if the user who reviews the movie has already reviewed it
+    const userAlreadyReviewed = movie.scores.findIndex(
+      (score) => score.user === userWhoReviews,
+    );
+
+    let previousScore: number | undefined = undefined;
+
+    if (userAlreadyReviewed !== -1) {
+      previousScore = movie.scores[userAlreadyReviewed].score;
+      movie.scores[userAlreadyReviewed].score = score;
+    }
+
+    const newScore = newAverageFromPrecomputed(
+      score,
+      movie.score,
+      movie.scores.length,
+      previousScore,
+    );
+    movie.score = newScore;
+
+    movie.scores.push({
+      score: score,
+      user: userWhoReviews,
+    });
+
+    await movie.save();
+
+    return movie;
+  }
+}
+
+export function newAverageFromPrecomputed(
+  newScore: number,
+  currentAverage: number,
+  containerLength: number,
+  previousScore?: number,
+): number {
+  if (previousScore === undefined) {
+    return (
+      (currentAverage * containerLength + newScore) / (containerLength + 1)
+    );
+  } else {
+    return (
+      (currentAverage * containerLength - previousScore + newScore) /
+      containerLength
+    );
+  }
 }

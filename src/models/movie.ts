@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { Schema, model, Document } from 'mongoose';
 import { Comment } from './comments';
 
@@ -6,11 +7,17 @@ interface IPlatform {
   url: string;
 }
 
+interface IMovieReviewScore {
+  score: number;
+  user: ObjectId | string;
+}
+
 export interface IMovie extends Document {
   name: string;
   cover: string;
   synopsis: string;
   trailer: string;
+  scores: IMovieReviewScore[];
   score: number;
   releaseDate: Date;
   platforms: IPlatform[];
@@ -40,9 +47,23 @@ const UserSchema = new Schema<IMovie>({
     type: String,
     required: true,
   },
+  scores: {
+    type: [
+      {
+        score: Number,
+        user: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+        },
+      },
+    ],
+    required: true,
+    default: [],
+  },
   score: {
     type: Number,
     required: true,
+    default: 0,
   },
   releaseDate: {
     type: Date,
