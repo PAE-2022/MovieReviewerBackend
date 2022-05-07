@@ -34,4 +34,22 @@ export class UserController {
       },
     });
   }
+
+  async addFollow(userId: string, followingId: string): Promise<void> {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new NotFoundError({
+        message: 'User not found',
+      });
+    }
+    const following = await UserModel.findById(followingId);
+    if (!following) {
+      throw new NotFoundError({
+        message: 'User not found',
+      });
+    }
+
+    user.following.push(following._id);
+    await user.save();
+  }
 }
