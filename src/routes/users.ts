@@ -12,6 +12,18 @@ import passport from 'passport';
 
 const router = Router();
 
+router.get(
+  '/:id',
+  //authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.params;
+    const controller = new UserController();
+    const user = await controller.getUserById(userId);
+    res.json(user);
+  }),
+);
+
+
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
