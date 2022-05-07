@@ -81,6 +81,18 @@ describe('GET /api/movies', () => {
       .expect(200);
   });
 
+  it('Rate a movie - 201 Created', async () => {
+    const token = await getToken(email, password);
+    const movie = await MovieModel.findOne({});
+    const score = faker.datatype.number({ min: 1, max: 5 });
+
+    await request(app)
+      .post(`/api/movies/${movie.id}/rate`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ score })
+      .expect(201);
+  });
+
   afterAll(async () => {
     await mongoose.connection.close();
   });

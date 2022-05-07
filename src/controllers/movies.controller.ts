@@ -72,31 +72,45 @@ export class MoviesController {
     const userAlreadyReviewed = movie.scores.findIndex(
       (score) => score.user === userWhoReviews,
     );
-    if (userAlreadyReviewed !== -1) {
-      const previousScore = movie.scores[userAlreadyReviewed].score;
-      // If the user has already reviewed the movie, we update the score
-      movie.scores[userAlreadyReviewed].score = score;
 
-      // Update the average score
-      const newAverageScore =
-        (movie.score * movie.scores.length - previousScore + score) /
-        movie.scores.length;
-      movie.score = newAverageScore;
-    } else {
-      movie.scores.push({
-        score: score,
-        user: userWhoReviews,
-      });
-      // This is the average score calculation
-      // This is an optimization to avoid calculating
-      // the average score everytime we want to get the average score
-      const newAverageScore =
-        (movie.score * movie.scores.length + score) / (movie.scores.length + 1);
-      movie.score = newAverageScore;
-    }
+    const previousScore: number | undefined =
+      userAlreadyReviewed === -1
+        ? undefined
+        : movie.scores[userAlreadyReviewed].score;
+
+    const newScore = newAverageFromPrecomputed(
+      score,
+      movie.score,
+      movie.scores.length,
+      previousScore,
+    );
+    movie.score = newScore;
+
+    movie.scores.push({
+      score: score,
+      user: userWhoReviews,
+    });
 
     await movie.save();
 
     return movie;
+  }
+}
+
+export function newAverageFromPrecomputed(
+  newScore: number,
+  currentAverage: number,
+  containerLength: number,
+  previousScore?: number,
+): number {
+  if (previousScore === undefined) {
+    return (
+      (currentAverage * containerLength + newScore) / (containerLength + 1)
+    );
+  } else {
+    return (
+      (currentAverage * containerLength - previousScore + newScore) /
+      containerLength
+    );
   }
 }
