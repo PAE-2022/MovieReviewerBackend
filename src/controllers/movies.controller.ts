@@ -56,4 +56,47 @@ export class MoviesController {
     }
     return movie;
   }
+
+  async assignScore(
+    movieId: string,
+    userWhoReviews: string,
+    score: number,
+  ): Promise<Movie> {
+    const movie = await MovieModel.findById(movieId);
+    if (!movie) {
+      throw new NotFoundError({
+        message: 'Movie not found',
+      });
+    }
+    // Check if the user who reviews the movie has already reviewed it
+    const userAlreadyReviewed = movie.scores.findIndex(
+      (score) => score.user === userWhoReviews,
+    );
+    if (userAlreadyReviewed !== -1) {
+      const previousScore = movie.scores[userAlreadyReviewed].score;
+      // If the user has already reviewed the movie, we update the score
+      movie.scores[userAlreadyReviewed].score = score;
+
+      // Update the average score
+      const newAverageScore =
+        (movie.score * movie.scores.length - previousScore + score) /
+        movie.scores.length;
+      movie.score = newAverageScore;
+    } else {
+      movie.scores.push({
+        score: score,
+        user: userWhoReviews,
+      });
+      // This is the average score calculation
+      // This is an optimization to avoid calculating
+      // the average score everytime we want to get the average score
+      const newAverageScore =
+        (movie.score * movie.scores.length + score) / (movie.scores.length + 1);
+      movie.score = newAverageScore;
+    }
+
+    await movie.save();
+
+    return movie;
+  }
 }
