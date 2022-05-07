@@ -12,7 +12,7 @@ describe('Moies controller', () => {
 
     // Calculate average
     const average = newAverageFromPrecomputed(
-      5,
+      newScore,
       previousAverage,
       numbers.length,
     );

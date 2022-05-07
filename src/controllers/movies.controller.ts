@@ -73,10 +73,12 @@ export class MoviesController {
       (score) => score.user === userWhoReviews,
     );
 
-    const previousScore: number | undefined =
-      userAlreadyReviewed === -1
-        ? undefined
-        : movie.scores[userAlreadyReviewed].score;
+    let previousScore: number | undefined = undefined;
+
+    if (userAlreadyReviewed !== -1) {
+      previousScore = movie.scores[userAlreadyReviewed].score;
+      movie.scores[userAlreadyReviewed].score = score;
+    }
 
     const newScore = newAverageFromPrecomputed(
       score,
