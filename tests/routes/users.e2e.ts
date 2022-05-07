@@ -39,6 +39,16 @@ describe('GET /api/users', () => {
         },
       ],
     });
+
+    // Create user test
+    await request(app)
+      .post('/api/users/signup')
+      .send({
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        dateOfBirth: faker.date.past(),
+        name: faker.name.firstName() + ' ' + faker.name.lastName(),
+      });
   });
 
   it('Create a user - 200 OK', async () => {
@@ -85,6 +95,21 @@ describe('GET /api/users', () => {
       .delete(`/api/users/favorites/${movie.id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
+  });
+
+  it('Add follower - 201 Created', async () => {
+    const token = await getToken(email, password);
+    const otherUser = await UserModel.findOne({
+      email: {
+        $ne: email,
+      },
+    });
+
+    await request(app)
+      .post(`/api/users/followers`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ userId: otherUser.id })
+      .expect(201);
   });
 
   afterAll(async () => {

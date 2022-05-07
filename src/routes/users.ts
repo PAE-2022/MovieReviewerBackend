@@ -1,6 +1,7 @@
 import config from '@config/config';
 import { UserController } from '@controllers/users.controller';
 import { AddToFavoritesDto } from '@dto/users/add-to-favorites.dto';
+import { FollowDto } from '@dto/users/follow.dto';
 import { User } from '@models/user';
 import { authorize } from '@utils/authorize';
 import { tryCatchHandler } from '@utils/route-catch';
@@ -48,7 +49,7 @@ router.post(
 
 router.post(
   '/favorites',
-  validate<AddToFavoritesDto>(AddToFavoritesDto),
+  validate(AddToFavoritesDto),
   authorize(),
   tryCatchHandler(async (req, res) => {
     const { id: userId } = req.user as User;
@@ -73,6 +74,22 @@ router.delete(
     await controller.removeMovieFromFavorites(userId, movieId);
     res.json({
       message: 'Movie removed from favorites',
+    });
+  }),
+);
+
+router.post(
+  '/followers',
+  validate(FollowDto),
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const { userId: followId } = req.body as FollowDto;
+
+    const controller = new UserController();
+    await controller.addFollow(userId, followId);
+    res.status(201).json({
+      message: 'Movie added to favorites',
     });
   }),
 );
