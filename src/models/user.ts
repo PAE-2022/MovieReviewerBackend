@@ -3,6 +3,37 @@ import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
 import { IMovie } from './movie';
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    User:
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *          description: User email
+ *          format: email
+ *        name:
+ *          type: string
+ *          description: User name
+ *        dateOfBirth:
+ *          type: string
+ *          description: User date of birth
+ *          format: date-time
+ *        avatar:
+ *          type: string
+ *          description: User avatar
+ *          format: url
+ *        following:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/User'
+ *        favorites:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Movie'
+ */
 interface IUser extends Document {
   email: string;
   password: string;

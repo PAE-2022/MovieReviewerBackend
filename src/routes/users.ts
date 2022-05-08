@@ -12,6 +12,31 @@ import passport from 'passport';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *  get:
+ *   description: Get user by id
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: user id
+ *      schema:
+ *        type: string
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/User'
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.get(
   '/:id',
   //authorize(),
@@ -23,6 +48,33 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /api/users/signup:
+ *  post:
+ *   description: Signup user
+ *   requestBody:
+ *     description: Create user dto
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/CreateUserDto'
+ *   responses:
+ *    201:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
@@ -33,6 +85,40 @@ router.post(
   },
 );
 
+/**
+ * @swagger
+ * /api/users/login:
+ *  post:
+ *   description: login user
+ *   requestBody:
+ *     description: Create user dto
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               format: email
+ *             password:
+ *               type: string
+ *               format: password
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              token:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/login',
   passport.authenticate('login', { session: false }),
@@ -58,6 +144,33 @@ router.post(
   },
 );
 
+/**
+ * @swagger
+ * /api/users/favorites:
+ *  post:
+ *   description: Add movie to favorites
+ *   requestBody:
+ *     description: Add to favorites dto
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/AddToFavoritesDto'
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/favorites',
   validate(AddToFavoritesDto),
@@ -74,6 +187,33 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /api/users/favorites/{id}:
+ *  delete:
+ *   description: Delete movie from favorites
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: favorite movie id
+ *      schema:
+ *        type: string
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.delete(
   '/favorites/:id',
   authorize(),
@@ -89,6 +229,33 @@ router.delete(
   }),
 );
 
+/**
+ * @swagger
+ * /api/users/followers:
+ *  post:
+ *   description: Add user to followers
+ *   requestBody:
+ *     description: Add to followers dto
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/FollowDto'
+ *   responses:
+ *    201:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/followers',
   validate(FollowDto),

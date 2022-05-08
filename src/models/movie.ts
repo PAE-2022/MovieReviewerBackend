@@ -2,6 +2,21 @@ import { ObjectId } from 'mongodb';
 import { Schema, model, Document } from 'mongoose';
 import { Comment } from './comments';
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Platform:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *          description: Platform of the movie
+ *        url:
+ *          type: string
+ *          description: Url of the movie
+ *          format: url
+ */
 interface IPlatform {
   name: string;
   url: string;
@@ -12,6 +27,62 @@ interface IMovieReviewScore {
   user: ObjectId | string;
 }
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Movie:
+ *      type: object
+ *      properties:
+ *        _id:
+ *          type: string
+ *        name:
+ *          type: string
+ *          description: Movie title
+ *        cover:
+ *          type: string
+ *          description: Movie cover
+ *          format: url
+ *        synopsis:
+ *          type: string
+ *          description: Movie synopsis
+ *        trailer:
+ *          type: string
+ *          description: Movie trailer
+ *          format: url
+ *        score:
+ *          type: number
+ *          description: Movie score
+ *        releaseDate:
+ *          type: string
+ *          description: Movie release date
+ *          format: date-time
+ *        platforms:
+ *          type: array
+ *          items:
+ *           $ref: '#/components/schemas/Platform'
+ *          description: Movie platforms
+ *        screenWriters:
+ *          type: array
+ *          items:
+ *            type: string
+ *          description: Movie screen writers
+ *        cast:
+ *          type: array
+ *          items:
+ *            type: string
+ *          description: Movie cast
+ *        genres:
+ *          type: array
+ *          items:
+ *            type: string
+ *          description: Movie genres
+ *        comments:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Comment'
+ *          description: Movie comments
+ */
 export interface IMovie extends Document {
   name: string;
   cover: string;

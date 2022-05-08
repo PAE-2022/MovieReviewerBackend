@@ -8,6 +8,25 @@ import { Router } from 'express';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/movies:
+ *  get:
+ *   description: Get all movies
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/Movie'
+ *   tags:
+ *    - movies
+ *   produces:
+ *    - application/json
+ */
 router.get(
   '/',
   tryCatchHandler(async (req, res) => {
@@ -17,6 +36,31 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /api/movies/{id}:
+ *  get:
+ *   description: Get all movies
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: Movie id
+ *      schema:
+ *        type: string
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Movie'
+ *   tags:
+ *    - movies
+ *   produces:
+ *    - application/json
+ */
 router.get(
   '/:id',
   authorize(),
@@ -29,6 +73,38 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /api/movies/{id}/comment:
+ *  post:
+ *   description: Get all movies
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: Movie id
+ *      schema:
+ *        type: string
+ *   requestBody:
+ *     description: Comment content
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/CreateCommentDto'
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Comment'
+ *   tags:
+ *    - movies
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/:id/comment',
   authorize(),
@@ -44,6 +120,38 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /api/movies/{id}/rate:
+ *  post:
+ *   description: Rate a movie
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: Movie id
+ *      schema:
+ *        type: string
+ *   requestBody:
+ *     description: Rate content
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/RateMovieDto'
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Movie'
+ *   tags:
+ *    - movies
+ *   produces:
+ *    - application/json
+ */
 router.post(
   '/:id/rate',
   authorize(),
