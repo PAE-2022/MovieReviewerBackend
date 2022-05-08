@@ -23,7 +23,6 @@ router.get(
   }),
 );
 
-
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),

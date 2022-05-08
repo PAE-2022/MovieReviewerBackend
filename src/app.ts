@@ -3,7 +3,7 @@ import UserRouter from '@routes/users';
 import MovieRouter from '@routes/movies';
 import { errorHandler } from '@utils/route-catch';
 import { logErrors } from '@utils/log-error';
-const cors = require('cors');
+import cors from 'cors';
 import '@config/auth';
 
 const app = Express();
