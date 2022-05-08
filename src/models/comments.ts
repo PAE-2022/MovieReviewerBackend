@@ -53,6 +53,10 @@ const UserSchema = new Schema<IComment>({
     required: true,
     default: Date.now,
   },
+  content: {
+    type: String,
+    required: true,
+  },
 });
 
 UserSchema.pre<IComment>('save', async function (next) {

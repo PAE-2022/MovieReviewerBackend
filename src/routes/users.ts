@@ -1,6 +1,7 @@
 import config from '@config/config';
 import { UserController } from '@controllers/users.controller';
 import { AddToFavoritesDto } from '@dto/users/add-to-favorites.dto';
+import { CreateUserDto } from '@dto/users/create-user.dto';
 import { FollowDto } from '@dto/users/follow.dto';
 import { User } from '@models/user';
 import { authorize } from '@utils/authorize';
@@ -77,6 +78,7 @@ router.get(
  */
 router.post(
   '/signup',
+  validate(CreateUserDto),
   passport.authenticate('signup', { session: false }),
   async (req, res) => {
     res.json({

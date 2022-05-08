@@ -17,7 +17,7 @@ import { Comment } from './comments';
  *          description: Url of the movie
  *          format: url
  */
-interface IPlatform {
+export interface IPlatform {
   name: string;
   url: string;
 }
@@ -90,7 +90,7 @@ export interface IMovie extends Document {
   trailer: string;
   scores: IMovieReviewScore[];
   score: number;
-  releaseDate: Date;
+  releaseDate: number;
   platforms: IPlatform[];
   screenwriters: string[];
   cast: string[];
@@ -105,6 +105,7 @@ const UserSchema = new Schema<IMovie>({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   cover: {
     type: String,
@@ -116,7 +117,7 @@ const UserSchema = new Schema<IMovie>({
   },
   trailer: {
     type: String,
-    required: true,
+    required: false,
   },
   scores: {
     type: [
@@ -137,7 +138,7 @@ const UserSchema = new Schema<IMovie>({
     default: 0,
   },
   releaseDate: {
-    type: Date,
+    type: Number,
     required: true,
   },
   platforms: {

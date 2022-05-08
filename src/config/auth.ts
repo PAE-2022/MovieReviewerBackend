@@ -19,7 +19,8 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const userRequest = req.body as CreateUserDto;
+        const userRequest = new CreateUserDto();
+        Object.assign(userRequest, req.body);
         const errors = await validate(userRequest);
         if (errors.length > 0) {
           return done({ errors });
@@ -32,7 +33,6 @@ passport.use(
         await newUser.save();
         return done(null, newUser);
       } catch (err) {
-        console.log(err instanceof MongoError);
         if (err instanceof MongoError && err.code === 11000) {
           return done(
             new BadRequestError(
