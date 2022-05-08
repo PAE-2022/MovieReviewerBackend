@@ -1,8 +1,17 @@
 import { NotFoundError } from '@errors/http-error';
 import { MovieModel } from '@models/movie';
-import { UserModel } from '@models/user';
+import { UserModel, User } from '@models/user';
 
 export class UserController {
+  async getUserById(currentUserId: string): Promise<User> {
+    const user = await UserModel.findById(currentUserId);
+    if (!user) {
+      throw new NotFoundError({
+        message: 'User not found',
+      });
+    }
+    return user;
+  }
   async addMovieToFavorites(userId: string, movieId: string): Promise<void> {
     const user = await UserModel.findById(userId);
     if (!user) {
