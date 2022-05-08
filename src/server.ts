@@ -4,6 +4,7 @@ import '@config/mongoose';
 import swaggerSpec from '@config/swagger';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
+import 'cron-jobs/fetch-apis';
 
 const port = process.env.PORT || 3000;
 

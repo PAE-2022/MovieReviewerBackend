@@ -11,7 +11,7 @@
     "test:cov": "jest --coverage",
     "build": "tsc",
     "start": "ts-node src/server.ts",
-    "start:dev": "nodemon src/server.ts",
+    "start:dev": "nodemon src/server.ts --ignore swagger.json",
     "lint": "eslint \"{src,apps,libs,tests}/**/*.ts\" --fix",
     "lint:ci": "eslint \"{src,apps,libs,tests}/**/*.ts\" --max-warnings 0"
   },
@@ -26,6 +26,7 @@
     "@types/jest": "^27.4.1",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.0.0",
+    "@types/node-cron": "^3.0.0",
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
@@ -50,6 +51,7 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "class-validator": "^0.13.2",
     "cors": "^2.8.5",
@@ -61,6 +63,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "4.5",
     "mongoose": "^6.3.0",
+    "node-cron": "^3.0.0",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

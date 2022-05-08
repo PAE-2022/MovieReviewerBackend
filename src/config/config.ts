@@ -52,6 +52,8 @@ config.ensureValues(
 
   // JWT
   'JWT_SECRET',
+
+  'RAPID_API_KEY',
 );
 
 export default config;

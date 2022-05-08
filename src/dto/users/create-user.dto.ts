@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsDateString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 /**
  * @swagger
@@ -33,6 +33,6 @@ export class CreateUserDto {
   @IsNotEmpty()
   name: string;
 
-  @IsDate()
+  @IsDateString()
   dateOfBirth: Date;
 }
