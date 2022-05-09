@@ -61,4 +61,13 @@ export class UserController {
     user.following.push(following._id);
     await user.save();
   }
+
+  async searchUsers(query: string): Promise<Array<User>> {
+    const users = await UserModel.find({
+      $text: {
+        $search: query,
+      },
+    });
+    return users;
+  }
 }

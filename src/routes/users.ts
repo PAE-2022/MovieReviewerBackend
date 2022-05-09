@@ -15,6 +15,49 @@ const router = Router();
 
 /**
  * @swagger
+ * /api/users/search:
+ *  get:
+ *   description: Get user by id
+ *   parameters:
+ *    - in: query
+ *      name: query
+ *      required: true
+ *      description: query to search
+ *      schema:
+ *        type: string
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/User'
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
+router.get(
+  '/search',
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const controller = new UserController();
+    const { query } = req.query;
+    if (!query) {
+      res.status(400).json({
+        message: 'Query is required',
+      });
+      return;
+    }
+    const users = await controller.searchUsers(query as string);
+    res.json(users);
+  }),
+);
+
+/**
+ * @swagger
  * /api/users/{id}:
  *  get:
  *   description: Get user by id
