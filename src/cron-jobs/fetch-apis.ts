@@ -117,5 +117,3 @@ export async function saveMovies() {
 /*cron.schedule('0 0 * * *', async () => {
   await saveMovies();
 });*/
-
-saveMovies();
