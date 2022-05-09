@@ -4,7 +4,10 @@ import { UserModel, User } from '@models/user';
 
 export class UserController {
   async getUserById(currentUserId: string): Promise<User> {
-    const user = await UserModel.findById(currentUserId);
+    const user = await UserModel.findById(currentUserId)
+      .populate('following')
+      .populate('favorites');
+
     if (!user) {
       throw new NotFoundError({
         message: 'User not found',
@@ -67,7 +70,10 @@ export class UserController {
       $text: {
         $search: query,
       },
-    });
+    })
+      .populate('following')
+      .populate('favorites');
+
     return users;
   }
 }
