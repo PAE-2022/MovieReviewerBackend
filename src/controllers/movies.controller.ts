@@ -5,8 +5,16 @@ import { Movie, MovieModel } from '@models/movie';
 import { UserModel } from '@models/user';
 
 export class MoviesController {
-  async getAllMovies(): Promise<Movie[]> {
-    const movies = await MovieModel.find({}).sort({ releaseDate: -1 });
+  async getAllMovies(search: string | undefined): Promise<Movie[]> {
+    if (search === undefined || search.trim().length === 0) {
+      const movies = await MovieModel.find({}).sort({ releaseDate: -1 });
+      return movies;
+    }
+    const movies = await MovieModel.find({
+      $text: {
+        $search: search,
+      },
+    });
     return movies;
   }
 

@@ -62,7 +62,7 @@ interface IMovieReviewScore {
  *          items:
  *           $ref: '#/components/schemas/Platform'
  *          description: Movie platforms
- *        screenWriters:
+ *        screenwriters:
  *          type: array
  *          items:
  *            type: string
@@ -179,6 +179,14 @@ const UserSchema = new Schema<IMovie>({
     ],
     default: [],
   },
+});
+
+UserSchema.index({
+  name: 'text',
+  synopsis: 'text',
+  genres: 'text',
+  screenwriters: 'text',
+  cast: 'text',
 });
 
 UserSchema.pre<IMovie>('save', async function (next) {

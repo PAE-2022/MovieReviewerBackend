@@ -9,7 +9,7 @@ export interface IFollower extends Document {
   updatedAt: Date;
 }
 
-const UserSchema = new Schema<IFollower>({
+const FollowerSchema = new Schema<IFollower>({
   from: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -32,10 +32,10 @@ const UserSchema = new Schema<IFollower>({
   },
 });
 
-UserSchema.pre<IFollower>('save', async function (next) {
+FollowerSchema.pre<IFollower>('save', async function (next) {
   this.updatedAt = new Date();
   next();
 });
-export const FollowerModel = model<IFollower>('Follower', UserSchema);
+export const FollowerModel = model<IFollower>('Follower', FollowerSchema);
 
 export type Follower = IFollower & Document;

@@ -13,6 +13,13 @@ const router = Router();
  * /api/movies:
  *  get:
  *   description: Get all movies
+ *   parameters:
+ *     - in: query
+ *       name: query
+ *       required: false
+ *       description: query
+ *       schema:
+ *         type: string
  *   responses:
  *    200:
  *      description: A successful response
@@ -31,7 +38,9 @@ router.get(
   '/',
   tryCatchHandler(async (req, res) => {
     const controller = new MoviesController();
-    const movies = await controller.getAllMovies();
+    const movies = await controller.getAllMovies(
+      req.query.query as string | undefined,
+    );
     res.json(movies);
   }),
 );

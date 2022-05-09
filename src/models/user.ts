@@ -98,6 +98,11 @@ const UserSchema = new Schema<IUser>({
   },
 });
 
+UserSchema.index({
+  email: 'text',
+  name: 'text',
+});
+
 UserSchema.pre<IUser>('validate', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
@@ -111,6 +116,14 @@ UserSchema.methods.isValidPassword = async function (
 ): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
+
+// Delete user password after serialization
+UserSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
+});
 
 export const UserModel = model<IUser>('User', UserSchema);
 
