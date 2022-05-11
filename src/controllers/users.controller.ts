@@ -3,6 +3,7 @@ import { ModifyUserDto } from '@dto/users/modifiy-user.dto';
 import { NotFoundError } from '@errors/http-error';
 import { MovieModel } from '@models/movie';
 import { UserModel, User } from '@models/user';
+import { io } from '@socketio/socketio';
 
 export class UserController {
   async getUserById(currentUserId: string): Promise<User> {
@@ -62,6 +63,10 @@ export class UserController {
         message: 'User not found',
       });
     }
+
+    io.emit(`following-${followingId}`, {
+      message: `${user.name} is now following you`,
+    });
 
     user.following.push(following._id);
     await user.save();

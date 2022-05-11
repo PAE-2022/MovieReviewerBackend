@@ -97,7 +97,8 @@
       "@utils/(.*)": "<rootDir>/utils/$1",
       "@models/(.*)": "<rootDir>/models/$1",
       "@dto/(.*)": "<rootDir>/dto/$1",
-      "@errors/(.*)": "<rootDir>/errors/$1"
+      "@errors/(.*)": "<rootDir>/errors/$1",
+      "@socketio/(.*)": "<rootDir>/socketio/$1"
     },
     "moduleDirectories": [
       "node_modules"
