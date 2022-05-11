@@ -3,6 +3,7 @@ import { UserController } from '@controllers/users.controller';
 import { AddToFavoritesDto } from '@dto/users/add-to-favorites.dto';
 import { CreateUserDto } from '@dto/users/create-user.dto';
 import { FollowDto } from '@dto/users/follow.dto';
+import { ModifyUserDto } from '@dto/users/modifiy-user.dto';
 import { User } from '@models/user';
 import { authorize } from '@utils/authorize';
 import { tryCatchHandler } from '@utils/route-catch';
@@ -313,6 +314,49 @@ router.post(
     await controller.addFollow(userId, followId);
     res.status(201).json({
       message: 'Movie added to favorites',
+    });
+  }),
+);
+
+/**
+ * @swagger
+ * /api/users:
+ *  patch:
+ *   description: Modify user
+ *   requestBody:
+ *     description: Modify user dto
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/components/schemas/ModifyUserDto'
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
+router.patch(
+  '/',
+  validate(ModifyUserDto),
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const modifyUserRequest = req.body as ModifyUserDto;
+
+    const controller = new UserController();
+    await controller.modifyUser(userId, modifyUserRequest);
+    res.status(200).json({
+      message: 'User modified',
     });
   }),
 );

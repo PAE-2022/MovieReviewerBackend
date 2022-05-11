@@ -1,3 +1,4 @@
+import { ModifyUserDto } from '@dto/users/modifiy-user.dto';
 import { NotFoundError } from '@errors/http-error';
 import { MovieModel } from '@models/movie';
 import { UserModel, User } from '@models/user';
@@ -75,5 +76,12 @@ export class UserController {
       .populate('favorites');
 
     return users;
+  }
+
+  async modifyUser(
+    userId: string,
+    modifyUserRequest: ModifyUserDto,
+  ): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $set: modifyUserRequest });
   }
 }

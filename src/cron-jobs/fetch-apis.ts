@@ -6,6 +6,8 @@ import config from '@config/config';
 
 async function getPlatformMovies(
   platform: 'netflix' | 'prime' | 'hbo',
+  page = 1,
+  contentType: 'movie' | 'series' = 'movie',
 ): Promise<IGetMovies> {
   const movies = await axios.get<IGetMovies>(
     'https://streaming-availability.p.rapidapi.com/search/basic',
@@ -13,7 +15,8 @@ async function getPlatformMovies(
       params: {
         country: 'mx',
         service: platform,
-        type: 'movie',
+        page,
+        type: contentType,
       },
       headers: {
         'X-RapidAPI-Key': config.get('RAPID_API_KEY'),
@@ -50,11 +53,12 @@ interface IMovieData {
   genres: string[];
 }
 
+const promiseTimeout = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function saveMovies() {
+  console.log('Fetching movies...');
   const genres = await getGenres();
-  const netflixMovies = await getPlatformMovies('netflix');
-  const primeMovies = await getPlatformMovies('prime');
-  const hboMovies = await getPlatformMovies('hbo');
 
   const movies: IMovieData[] = [];
 
@@ -100,9 +104,29 @@ export async function saveMovies() {
     });
   };
 
-  netflixMovies.results.forEach(addMovie);
-  primeMovies.results.forEach(addMovie);
-  hboMovies.results.forEach(addMovie);
+  const pages = 2;
+
+  for (let i = 1; i <= pages; i++) {
+    const netflixMovies = await getPlatformMovies('netflix', i);
+    const primeMovies = await getPlatformMovies('prime', i);
+    const hboMovies = await getPlatformMovies('hbo', i);
+
+    const netflixSeries = await getPlatformMovies('netflix', i, 'series');
+    const primeSeries = await getPlatformMovies('prime', i, 'series');
+    const hboSeries = await getPlatformMovies('hbo', i, 'series');
+
+    netflixMovies.results.forEach(addMovie);
+    primeMovies.results.forEach(addMovie);
+    hboMovies.results.forEach(addMovie);
+
+    netflixSeries.results.forEach(addMovie);
+    primeSeries.results.forEach(addMovie);
+    hboSeries.results.forEach(addMovie);
+
+    await promiseTimeout(1000);
+  }
+
+  console.log(movies.length);
 
   try {
     await MovieModel.insertMany(movies, {
@@ -111,9 +135,12 @@ export async function saveMovies() {
   } catch (e) {
     // Ignore duplicate key error
   }
+  console.log('New movies saved');
 }
 
 // Every day, fetch movies APIs
-/*cron.schedule('0 0 * * *', async () => {
-  await saveMovies();
-});*/
+cron.schedule('0 0 * * *', async () => {
+  try {
+    await saveMovies();
+  } catch (e) {}
+});

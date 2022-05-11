@@ -14,7 +14,7 @@ export class MoviesController {
       $text: {
         $search: search,
       },
-    });
+    }).sort({ createdAt: -1 });
     return movies;
   }
 
