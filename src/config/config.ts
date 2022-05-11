@@ -54,6 +54,11 @@ config.ensureValues(
   'JWT_SECRET',
 
   'RAPID_API_KEY',
+
+  // GCP
+  'GCS_BUCKET',
+  'GCLOUD_PROJECT',
+  'GCS_KEYFILE',
 );
 
 export default config;

@@ -1,3 +1,4 @@
+import { GcpFile } from '@config/multer';
 import { ModifyUserDto } from '@dto/users/modifiy-user.dto';
 import { NotFoundError } from '@errors/http-error';
 import { MovieModel } from '@models/movie';
@@ -83,5 +84,12 @@ export class UserController {
     modifyUserRequest: ModifyUserDto,
   ): Promise<void> {
     await UserModel.updateOne({ _id: userId }, { $set: modifyUserRequest });
+  }
+
+  async uploadProfilePicture(userId: string, file: GcpFile): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { avatar: file.linkUrl } },
+    );
   }
 }

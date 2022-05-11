@@ -1,4 +1,5 @@
 import config from '@config/config';
+import { GcpFile, multerFileUploadHandler } from '@config/multer';
 import { UserController } from '@controllers/users.controller';
 import { AddToFavoritesDto } from '@dto/users/add-to-favorites.dto';
 import { CreateUserDto } from '@dto/users/create-user.dto';
@@ -357,6 +358,55 @@ router.patch(
     await controller.modifyUser(userId, modifyUserRequest);
     res.status(200).json({
       message: 'User modified',
+    });
+  }),
+);
+
+/**
+ * @swagger
+ * /api/users/upload-profile:
+ *  post:
+ *   description: Upload profile picture
+ *   requestBody:
+ *     description: Upload profile picture dto
+ *     required: true
+ *     content:
+ *       multipart/form-data:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             picture:
+ *               type: string
+ *               format: binary
+ *               description: Profile picture
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
+router.post(
+  '/upload-profile',
+  authorize(),
+  multerFileUploadHandler.single('picture'),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const { file } = req;
+    const controller = new UserController();
+
+    await controller.uploadProfilePicture(userId, file as GcpFile);
+
+    res.status(200).json({
+      message: 'Profile picture uploaded',
     });
   }),
 );

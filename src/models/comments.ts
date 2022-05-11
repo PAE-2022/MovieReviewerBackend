@@ -17,8 +17,7 @@ import { User } from './user';
  *          type: string
  *          description: Movie id
  *        createdBy:
- *          type: string
- *          description: User id
+ *          $ref: '#/components/schemas/User'
  *        content:
  *          type: string
  *          description: Comment content
