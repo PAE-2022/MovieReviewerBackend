@@ -1,4 +1,5 @@
 import { MoviesController } from '@controllers/movies.controller';
+import { CreateCommentDto } from '@dto/movies/create-comment.dto';
 import { RateMovieDto } from '@dto/movies/rate-movie.dto';
 import { User } from '@models/user';
 import { authorize } from '@utils/authorize';
@@ -117,13 +118,15 @@ router.get(
 router.post(
   '/:id/comment',
   authorize(),
+  validate(CreateCommentDto),
   tryCatchHandler(async (req, res) => {
     const controller = new MoviesController();
     const { id: userId } = req.user as User;
+    const commentContent = req.body as CreateCommentDto;
     const comment = await controller.addComment(
       req.params.id,
       userId,
-      req.body.comment,
+      commentContent,
     );
     res.status(201).json(comment);
   }),

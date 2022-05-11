@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 /**
  * @swagger
@@ -10,11 +10,21 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
  *        name:
  *          type: string
  *          description: User name
- *          required: true
+ *          required: false
+ *        password:
+ *          type: string
+ *          description: User password
+ *          required: false
  */
 export class ModifyUserDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   name: string | undefined;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  @MinLength(8)
+  password: string | undefined;
 }

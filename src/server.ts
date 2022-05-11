@@ -5,6 +5,12 @@ import swaggerSpec from '@config/swagger';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
 import 'cron-jobs/fetch-apis';
+import { Server } from 'socket.io';
+import http from 'http';
+
+const server = http.createServer(app);
+
+const io = new Server(server);
 
 const port = process.env.PORT || 3000;
 
