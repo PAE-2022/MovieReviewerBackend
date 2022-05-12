@@ -10,6 +10,9 @@ import { IMovie } from './movie';
  *    User:
  *      type: object
  *      properties:
+ *        _id:
+ *          type: string
+ *          description: User's unique identifier
  *        email:
  *          type: string
  *          description: User email

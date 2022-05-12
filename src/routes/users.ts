@@ -413,9 +413,16 @@ router.post(
 
 /**
  * @swagger
- * /api/users/my-comments:
+ * /api/users/{id}/comments:
  *  get:
  *   description: Get logged in user comments
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      description: favorite movie id
+ *      schema:
+ *        type: string
  *   responses:
  *    200:
  *      description: A successful response
@@ -431,10 +438,10 @@ router.post(
  *    - application/json
  */
 router.get(
-  '/my-comments',
+  '/:id/comments',
   authorize(),
   tryCatchHandler(async (req, res) => {
-    const { id: userId } = req.user as User;
+    const userId = req.params.id;
     const controller = new UserController();
     const comments = await controller.getUserComments(userId);
     res.json(comments);
