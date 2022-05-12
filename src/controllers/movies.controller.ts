@@ -54,7 +54,6 @@ export class MoviesController {
       },
       populate: {
         path: 'createdBy',
-        select: 'name',
       },
     });
     if (!movie) {
