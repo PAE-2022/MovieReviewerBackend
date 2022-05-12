@@ -70,7 +70,7 @@ export class UserController {
       message: `${user.name} is now following you`,
     });
 
-    user.following.push(following._id);
+    // user.following.push(following._id);
     await user.save();
   }
 
