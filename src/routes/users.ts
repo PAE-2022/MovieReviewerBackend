@@ -411,4 +411,34 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /api/users/my-comments:
+ *  get:
+ *   description: Get logged in user comments
+ *   responses:
+ *    200:
+ *      description: A successful response
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/CommentDto'
+ *   tags:
+ *    - users
+ *   produces:
+ *    - application/json
+ */
+router.get(
+  '/my-comments',
+  authorize(),
+  tryCatchHandler(async (req, res) => {
+    const { id: userId } = req.user as User;
+    const controller = new UserController();
+    const comments = await controller.getUserComments(userId);
+    res.json(comments);
+  }),
+);
+
 export default router;

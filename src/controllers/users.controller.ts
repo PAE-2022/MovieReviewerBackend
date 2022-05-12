@@ -1,7 +1,9 @@
 import { GcpFile } from '@config/multer';
+import { CommentDto } from '@dto/users/comment.dto';
 import { ModifyUserDto } from '@dto/users/modifiy-user.dto';
 import { NotFoundError } from '@errors/http-error';
-import { MovieModel } from '@models/movie';
+import { CommentModel } from '@models/comments';
+import { Movie, MovieModel } from '@models/movie';
 import { UserModel, User } from '@models/user';
 import { io } from '@socketio/socketio';
 
@@ -96,5 +98,17 @@ export class UserController {
       { _id: userId },
       { $set: { avatar: file.linkUrl } },
     );
+  }
+
+  async getUserComments(userId: string): Promise<Array<CommentDto>> {
+    const comments = await CommentModel.find({ createdBy: userId }).populate(
+      'belongsTo',
+    );
+
+    return comments.map((comment) => ({
+      content: comment.content,
+      movieName: (comment.belongsTo as Movie).name,
+      moviePicture: (comment.belongsTo as Movie).cover,
+    }));
   }
 }
