@@ -66,6 +66,13 @@ export class UserController {
       });
     }
 
+    // check if user is already following
+    if (user.following.includes(following._id)) {
+      throw new NotFoundError({
+        message: 'User already following',
+      });
+    }
+
     io.emit(`following-${followingId}`, {
       message: `${user.name} is now following you`,
     });
